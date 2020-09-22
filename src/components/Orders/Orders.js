@@ -5,10 +5,13 @@ const Orders = props => {
   const orderEls = props.orders.map(order => {
     return (
       <div className="order">
+        <button className='remove' onClick={(event) => props.deleteOrder(order)}>Delete</button>
         <h3>{order.name}</h3>
         <ul className="ingredient-list">
           {order.ingredients.map(ingredient => {
-            return <li>{ingredient}</li>
+            return (
+              <li aria-label={ingredient}>{ingredient}</li>
+            )
           })}
         </ul>
       </div>
@@ -23,3 +26,5 @@ const Orders = props => {
 }
 
 export default Orders;
+
+// could give data-testid if aria doesn't work
