@@ -9,6 +9,7 @@ class App extends Component {
     super();
     this.state = {
       orders: [],
+      message: ''
     }
   }
 
@@ -43,7 +44,7 @@ class App extends Component {
           }
         })
         console.log(response);
-        this.setState({orders: newOrders});
+        this.setState({orders: newOrders, message: 'Deleted!'});
       })
       .catch(error => console.log('Could not delete'))
   }
@@ -55,7 +56,11 @@ class App extends Component {
           <h1>Burrito Builder</h1>
           <OrderForm addOrder={this.addNewOrder}/>
         </header>
-
+        {this.state.message !== '' &&
+          <>
+            <p>{this.state.message}</p>
+          </>
+        }
         <Orders orders={this.state.orders} deleteOrder={this.removeOrder}/>
       </main>
     );

@@ -1,10 +1,9 @@
 import React from 'react';
 import App from "./App";
-import OrderForm from '../OrderForm/OrderForm.js';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 jest.mock('../../apiCalls.js');
-import { getOrders, postOrder } from '../../apiCalls'
+import { getOrders, postOrder, deleteOrder } from '../../apiCalls'
 
 describe('App', () => {
   it('should show page and active orders on load', async () => {
@@ -71,5 +70,37 @@ describe('App', () => {
       expect(newOrder).toBeInTheDocument();
       expect(oldOrder).toBeInTheDocument();
     })
+  })
+  it('should update display on delete', async () => {
+    getOrders.mockResolvedValue({
+      orders: [
+        {id: 1,
+        name: 'Taryn',
+        ingredients: ['beans', 'sour cream']
+        }
+      ]
+    })
+
+    deleteOrder.mockResolvedValue('Success');
+
+    render(
+      <App />
+    )
+
+    const orderName = await waitFor(() =>screen.getByText('Taryn'));
+    const ingredient1 = screen.getByRole('listitem', {name: 'beans'});
+    const ingredient2 = screen.getByRole('listitem', {name: 'sour cream'});
+    const button = screen.getByRole('button', {name: 'Delete'})
+
+    expect(orderName).toBeInTheDocument();
+    expect(ingredient1).toBeInTheDocument();
+    expect(ingredient2).toBeInTheDocument();
+    expect(button).toBeInTheDocument();
+
+    fireEvent.click(button);
+
+    const message = await waitFor(() => screen.getByText('Deleted!'))
+
+    expect(message).toBeInTheDocument()
   })
 })
