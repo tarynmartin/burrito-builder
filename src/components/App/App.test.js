@@ -23,7 +23,7 @@ describe('App', () => {
     )
 
     const orderName = await waitFor(() =>screen.getByText('Taryn'));
-    const ingredient1 = await waitFor(() => screen.getByRole('listitem', {name: 'beans'}));
+    const ingredient1 = screen.getByRole('listitem', {name: 'beans'});
     const ingredient2 = screen.getByRole('listitem', {name: 'sour cream'});
 
     expect(orderName).toBeInTheDocument();
@@ -71,6 +71,5 @@ describe('App', () => {
       expect(newOrder).toBeInTheDocument();
       expect(oldOrder).toBeInTheDocument();
     })
-
   })
 })

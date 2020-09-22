@@ -42,6 +42,7 @@ class App extends Component {
             return order;
           }
         })
+        console.log(response);
         this.setState({orders: newOrders});
       })
       .catch(error => console.log('Could not delete'))
