@@ -9,10 +9,35 @@ class OrderForm extends Component {
       ingredients: []
     };
   }
+  handleIngredientChange = (event) => {
+    event.preventDefault();
+    const oldIngredients = this.state.ingredients;
+    const newIngredients = oldIngredients.push(event.target.name);
+    this.setState({ ingredients: oldIngredients})
+  }
 
+  handleNameChange = (event) => {
+    const inputKey = event.target.name;
+    const inputValue = event.target.value;
+    this.setState({[inputKey]: inputValue})
+  }
 
   handleSubmit = e => {
     e.preventDefault();
+    if (this.state.name !== '' && this.state.ingredients.length > 0) {
+      const newOrder = {
+        name: this.state.name,
+        ingredients: this.state.ingredients
+      }
+
+      this.props.addOrder(newOrder);
+    } else if (this.state.name === '' && this.state.ingredients.length > 0){
+      return alert('Please enter a name for your order')
+    } else if (this.state.name !== '' && this.state.ingredients.length === 0) {
+      return alert('Please choose at least one ingredient for your order')
+    } else {
+      return alert('Please enter a name and one ingredient for your order')
+    }
     this.clearInputs();
   }
 
