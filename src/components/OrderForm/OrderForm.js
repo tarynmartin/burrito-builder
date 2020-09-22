@@ -13,8 +13,39 @@ class OrderForm extends Component {
   handleIngredientChange = (event) => {
     event.preventDefault();
     const oldIngredients = this.state.ingredients;
-    const newIngredients = oldIngredients.push(event.target.name);
+    oldIngredients.push(event.target.name);
+    this.checkForDuplicates(oldIngredients)
     this.setState({ ingredients: oldIngredients})
+  }
+
+  checkForDuplicates(ingredients) {
+    const ingredientsObj = ingredients.reduce((total, ingredient) => {
+      const keys = Object.keys(total);
+      if(!keys.includes(ingredient)) {
+        total[ingredient] = 1;
+      } else {
+        total[ingredient] += 1;
+      }
+      return total;
+    }, {})
+
+    const keyNames = Object.keys(ingredientsObj);
+
+    const finalList = keyNames.filter(ingredient => {
+      if (ingredientsObj[ingredient] < 3) {
+        return ingredient;
+      }
+    })
+
+    console.log(finalList)
+    const finalFinalList = ingredients.filter(ingredient => {
+      if (finalList.includes(ingredient)) {
+        return ingredient;
+      }
+    })
+
+    console.log(finalFinalList)
+    this.setState({ingredients: finalFinalList})
   }
 
   handleNameChange = (event) => {
@@ -69,7 +100,7 @@ class OrderForm extends Component {
         { ingredientButtons }
 
         <p>Order: { this.state.ingredients.join(', ') || 'Nothing selected' }</p>
-        
+
         {this.state.error !== '' &&
           <>
             <p>{this.state.error}</p>
